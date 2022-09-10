@@ -5,4 +5,4 @@
 <h2 align="center"> Made by PizzaLover & FingerBirdy</h4>
 
 
-<h1 align="center">PizzaClient is the best minecraft client</h3>
+<h4 align="center">PizzaClient is the best minecraft client</h3>
