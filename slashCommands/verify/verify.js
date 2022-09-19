@@ -1,8 +1,12 @@
 const { ApplicationCommandType, EmbedBuilder, ApplicationCommandOptionType } = require('discord.js');
 const fetch = require('node-fetch')
 const fs = require('fs');
+const path = require('path');
 
 var VERIFICATIONGUILD = "Victorem";
+
+const { getAPIKey } = require('../utils/APISwapper.js');
+
 
 
 module.exports = {
@@ -25,6 +29,10 @@ module.exports = {
         }
     ],
 	run: async (client, interaction) => {
+
+        let apiKey = await getAPIKey();
+
+        // console.log(apiKey);
 		var { options, member } = interaction;
         
 
@@ -32,7 +40,7 @@ module.exports = {
 		var PLAYERUUID = await fetch(`https://api.mojang.com/users/profiles/minecraft/${options.getString('ign')}?at=${unixtime}`)
 		.then(res => res.json())
 
-		let themember = await fetch(`https://api.hypixel.net/player?uuid=${PLAYERUUID.id}&key=4e3f3e85-971a-4414-b3a3-c8bc0096295c`)
+		let themember = await fetch(`https://api.hypixel.net/player?uuid=${PLAYERUUID.id}&key=${apiKey}`)
 		.then(res => res.json());
 
 		console.log(themember['player']['socialMedia']['links']['DISCORD']);

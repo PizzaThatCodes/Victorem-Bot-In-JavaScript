@@ -6,6 +6,8 @@ var NETWORKLEVELREQ = 25;
 var OFFLINETHRESHOLD = 14;
 var GUILDNAME = "Victorem";
 
+var { getAPIKey } = require('../utils/APISwapper.js');
+
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -15,19 +17,13 @@ module.exports = {
 	description: "See which members need to be kicked from the guild",
 	cooldown: 30000,
 	type: ApplicationCommandType.ChatInput,
-	options: [
-        {
-            name: "api-token",
-            description: "The Hypixel API token (do /api new)",
-            type: ApplicationCommandOptionType.String,
-            required: true
-        }
-    ],
 	run: async (client, interaction) => {
 	 
         const { options } = interaction;
 
-            let guild = await fetch(`https://api.hypixel.net/guild?name=${GUILDNAME}&key=${options.getString("api-token")}`)
+        let apiKey = await getAPIKey();
+
+            let guild = await fetch(`https://api.hypixel.net/guild?name=${GUILDNAME}&key=${apiKey}`)
             .then(res => res.json());
 
 
@@ -63,10 +59,15 @@ module.exports = {
             var warningmessagelist = [];
             var kickmessagelist = [];
             var failedToGrabInfo = [];
+            var dontKickCauseOG = [];
 
                 for(var member of guild['guild']['members']) {
                     members[member['uuid']] = {}
                     memberList.push(member['uuid'])
+
+                    if(member['joined'] < 1622523600000) {
+                      dontKickCauseOG.push(member['uuid']);
+                    }
                 }
 
                 var memberscounted = 0;
@@ -93,13 +94,26 @@ module.exports = {
 
                 for(var uuid of memberList) {
 
-                    await sleep(750);
+                  var exemptList = require(`../moderation/exempt-list.json`);
+
+                  if(Object.keys(exemptList).includes(uuid)) {
+                    continue;
+                  }
+                  
+                  
+                  if(dontKickCauseOG.includes(uuid)) {
+                    console.log(uuid);
+                    continue;
+                  }
+
+                    await sleep(250);
+
                     
                         memberscounted += 1;
 
                         bar = filledBar(memberList.length, memberscounted, 20);
 
-                        let member = await fetch(`https://api.hypixel.net/player?uuid=${uuid}&key=${options.getString("api-token")}`)
+                        let member = await fetch(`https://api.hypixel.net/player?uuid=${uuid}&key=${apiKey}`)
                         .then(res => res.json());
 
                         if(member.status && member.status != 200) {
