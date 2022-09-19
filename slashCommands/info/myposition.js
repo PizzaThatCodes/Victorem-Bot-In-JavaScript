@@ -3,6 +3,8 @@ const fetch = require('node-fetch')
 
 var GUILDNAME = "Victorem";
 
+var { getAPIKey } = require('../utils/APISwapper.js');
+
 module.exports = {
 	name: 'myposition',
 	description: "quick tutorial on how to link your account",
@@ -18,6 +20,7 @@ module.exports = {
     ],
 	run: async (client, interaction) => {
 		const { options } = interaction;
+		let apiKey = await getAPIKey();
 
 		const args = options.getString('ign');
 
@@ -34,7 +37,7 @@ module.exports = {
 		var members = new Array();;
 		var membersSorted = {};
 
-		let guild = await fetch(`https://api.hypixel.net/guild?name=${GUILDNAME}&key=4e3f3e85-971a-4414-b3a3-c8bc0096295c`)
+		let guild = await fetch(`https://api.hypixel.net/guild?name=${GUILDNAME}&key=${apiKey}`)
 		.then(res => res.json());
 
 		if(guild.status && guild.status != 200) {

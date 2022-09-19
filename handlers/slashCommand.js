@@ -20,6 +20,8 @@ module.exports = (client) => {
 		const files = fs.readdirSync(`./slashCommands/${dir}/`).filter(file => file.endsWith('.js'));
 
 		for(const file of files) {
+			if(file === "APISwapper.js") continue;
+			// console.log(file);
 				const slashCommand = require(`../slashCommands/${dir}/${file}`);
 				slashCommands.push({
 					name: slashCommand.name,
