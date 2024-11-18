@@ -10,7 +10,7 @@ client.on("ready", () => {
 		{ name: `The Bridge`, type: ActivityType.Playing },
 		{ name: `Skywars`, type: ActivityType.Playing },
 		{ name: `Pixel Party`, type: ActivityType.Playing },
-		{ name: `Housing`, type: ActivityType.Playing },
+		{ name: `Housing`, type: ActivityType.Playing }
 	];
 	const status = [
 		'online',
@@ -27,7 +27,7 @@ client.on("ready", () => {
 	let s = 0;
 	setInterval(() => {
 		if(s >= activities.length) s = 0
-		client.user.setStatus(status[s])
+		client.user.setStatus('dnd')
 		s++;
 	}, 5000);
 	console.log(chalk.red(`Logged in as ${client.user.tag}!`))

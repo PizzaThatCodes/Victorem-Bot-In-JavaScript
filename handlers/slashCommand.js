@@ -21,6 +21,7 @@ module.exports = (client) => {
 
 		for(const file of files) {
 			if(file === "APISwapper.js") continue;
+			if(file === "ConfigStuff.js") continue;
 			// console.log(file);
 				const slashCommand = require(`../slashCommands/${dir}/${file}`);
 				slashCommands.push({

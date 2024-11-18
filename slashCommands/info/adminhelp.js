@@ -5,6 +5,7 @@ module.exports = {
 	description: "Admin help menu with all the commands.",
 	type: ApplicationCommandType.ChatInput,
 	cooldown: 3000,
+	default_member_permissions: 'Administrator',
 	run: async (client, interaction) => {
 		interaction.reply({
 			embeds: [

@@ -7,6 +7,20 @@ const prefix = client.prefix;
 const cooldown = new Collection();
 
 client.on('messageCreate', async message => {
+	
+//		if(message.guild.id === "1101256496874004690") {
+//			if(!message.author.bot) {
+//				const guild = client.guilds.cache.find(i => i.id === "499294621453516802");
+//				const channel = guild.channels.cache.find(i => i.name === message.channel.name);
+//				channel.send(`${message.content}`);
+//			}
+//		} else {
+//			if(message.author.id === "1013727660427444265") return;
+//			const guild = client.guilds.cache.find(i => i.id === "1101256496874004690");
+//			const channel = guild.channels.cache.find(i => i.name === message.channel.name);
+//			channel.send(`**${message.author.tag}:** ${message.content}`);
+//	}
+	
 	if(message.author.bot) return;
 	if(message.channel.type !== 0) return;
 	if(!message.content.startsWith(prefix)) return; 

@@ -1,4 +1,4 @@
-const { EmbedBuilder, ApplicationCommandType, ApplicationCommandOptionType } = require('discord.js');
+const { EmbedBuilder, ApplicationCommandType, ApplicationCommandOptionType, PermissionFlagsBits, PermissionsBitField } = require('discord.js');
 const fetch = require('node-fetch');
 const chalk = require('chalk');
 
@@ -17,6 +17,7 @@ module.exports = {
 	description: "See which members need to be kicked from the guild",
 	cooldown: 30000,
 	type: ApplicationCommandType.ChatInput,
+  default_member_permissions: 'Administrator',
 	run: async (client, interaction) => {
 	 
         const { options } = interaction;
@@ -102,7 +103,6 @@ module.exports = {
                   
                   
                   if(dontKickCauseOG.includes(uuid)) {
-                    console.log(uuid);
                     continue;
                   }
 
@@ -113,15 +113,22 @@ module.exports = {
 
                         bar = filledBar(memberList.length, memberscounted, 20);
 
+						
                         let member = await fetch(`https://api.hypixel.net/player?uuid=${uuid}&key=${apiKey}`)
                         .then(res => res.json());
+						
+						if(member.cause === "Key throttle" && member.throttle) {
+							apiKey = await getAPIKey();
+							member = await fetch(`https://api.hypixel.net/player?uuid=${uuid}&key=${apiKey}`)
+							.then(res => res.json());
+						}
 
                         if(member.status && member.status != 200) {
 
                           failedToGrabInfo.push(`Failed to fetch data. UUID = ${uuid}`);
                           continue;
                         }
-
+						
                         member = member['player'];
 
 

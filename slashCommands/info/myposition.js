@@ -4,10 +4,11 @@ const fetch = require('node-fetch')
 var GUILDNAME = "Victorem";
 
 var { getAPIKey } = require('../utils/APISwapper.js');
+const { createEmbed } = require('../utils/ConfigStuff.js');
 
 module.exports = {
 	name: 'myposition',
-	description: "quick tutorial on how to link your account",
+	description: "Check your current position in the guild!",
 	type: ApplicationCommandType.ChatInput,
 	cooldown: 3000,
 	options: [
@@ -42,12 +43,12 @@ module.exports = {
 
 		if(guild.status && guild.status != 200) {
 		  interaction.editReply({ embeds: [
-			new EmbedBuilder()
-			.setTitle(`***${GUILDNAME} Current Position***`)
-			.setColor(`Purple`)
-			.setDescription(`
+			await createEmbed(`***${GUILDNAME} Current Position***`,
+			`
 			***Error occured while trying...***
-			Unable to connect to the API. Try again later.`)
+			Unable to connect to the API. Try again later.`,
+			'Purple',
+			interaction)
 			]})
 		  return;
 		}
@@ -63,12 +64,12 @@ module.exports = {
 		if(!Object.keys(members).includes(playerUUID.id)) {
 			interaction.reply({
 				embeds: [
-					new EmbedBuilder()
-					.setTitle(`Issue with this player!`)
-					.setColor("Purple")
-					.setDescription(`
+					await createEmbed(`Issue with this player!`,
+					`
 					${ign} Is currently not in the guild! please choose someone who is in the guild currently
-					`)
+					`,
+					'Purple',
+					interaction)
 				]
 			})
 			return;
@@ -106,12 +107,12 @@ module.exports = {
 
 		await interaction.reply({
 			embeds: [
-				new EmbedBuilder()
-				.setTitle(`${ign}'s Current Position`)
-				.setColor("Purple")
-				.setDescription(`
+				await createEmbed(`${ign}'s Current Position`,
+				`
 				${ign} Is currently rank #${rank} with ${membersSorted[playerUUID.id]} GEXP in the past 7 days.
-				`)
+				`,
+				"Purple",
+				interaction)
 			]
 		})
 
